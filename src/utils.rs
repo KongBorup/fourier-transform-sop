@@ -1,3 +1,5 @@
+use std::time::{Duration, Instant};
+
 pub fn sequence(min: f64, max: f64, by: f64) -> Vec<f64> {
     let n = ((max - min) / by).abs().floor() as u32;
     let mut seq = Vec::new();
@@ -7,4 +9,12 @@ pub fn sequence(min: f64, max: f64, by: f64) -> Vec<f64> {
     }
 
     seq
+}
+
+pub fn benchmark<F: Fn()>(f: F) -> Duration {
+    let start = Instant::now();
+    f();
+    let duration = start.elapsed();
+
+    duration
 }
