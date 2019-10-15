@@ -1,5 +1,5 @@
 use num_traits::Num;
-use std::ops::{Mul, Add, AddAssign};
+use std::ops::{Mul, Add, AddAssign, Sub};
 use std::convert::From;
 use std::fmt;
 
@@ -90,13 +90,13 @@ impl<T> AddAssign for Complex<T>
     }
 }
 
-// impl<T: Num> Sub for Complex<T> {
-//     type Output = Self;
+impl<T: Num> Sub for Complex<T> {
+    type Output = Self;
 
-//     fn sub(self, other: Self) -> Self {
-//         Self {
-//             re: self.re - other.re,
-//             im: self.im - other.im,
-//         }
-//     }
-// }
+    fn sub(self, other: Self) -> Self {
+        Self {
+            re: self.re - other.re,
+            im: self.im - other.im,
+        }
+    }
+}
