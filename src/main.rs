@@ -1,6 +1,7 @@
 mod complex;
 mod fourier_transform;
 mod utils;
+mod graphing;
 
 use complex::Complex;
 use std::f64::consts::PI;
@@ -21,8 +22,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         // funktionsværdier.
         let (t, x) = generate_signal(fs);
         // Benyt algoritmerne til at beregne Fouriertransformationen.
-        let X_fft = fourier_transform::fft(&x)?;
-        let X_dft = fourier_transform::dft(&x);
+        let X_fft = fft(&x)?;
+        let X_dft = dft(&x);
 
         // Beregn hver X[k]-værdis tilhørende frekvens.
         let n = x.len();
@@ -80,10 +81,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-// Genererer et 4-sekunders signal af en sum af 2.5Hz- og 3Hz-bølger med `fs`
-// samples per sekund.
+// Genererer et 4-sekunders signal af en sum af 2,5Hz- 5Hz- og 8Hz-bølger med
+// amplituderne 0,5, 1 og 1,3. `fs` samples per sekund.
 pub fn generate_signal(fs: f64) -> (Vec<f64>, Vec<Complex<f64>>) {
-    let f_goal = (3.0, 2.5);
+    let f_goal = (5.0, 2.5, 8.0);
     let t_max = 4.0;
 
     // Generér inputsignalets sample-tidspunkter
@@ -92,7 +93,9 @@ pub fn generate_signal(fs: f64) -> (Vec<f64>, Vec<Complex<f64>>) {
     // Generér inputsignalets samples som komplekse tal
     let x: Vec<Complex<f64>> = t
         .iter()
-        .map(|tn| (f_goal.0 * t_max * PI * tn).cos() + (f_goal.1 * t_max * PI * tn).cos())
+        .map(|tn| 0.5 * (f_goal.0 * t_max * PI * tn).cos()
+                + 1.0 * (f_goal.1 * t_max * PI * tn).sin()
+                + 1.3 * (f_goal.2 * t_max * PI * tn).cos())
         // Alle reelle tal er komplekse tal, hvis imaginære komponent er nul.
         .map(|val| Complex::new(val, 0.0))
         .collect();
